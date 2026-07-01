@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dr.Shiri Clinic</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            margin: 0;
+            background: #f4f7fb;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2b5876, #4e4376);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+
+        button {
+            background: #4e4376;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #2b5876;
+        }
+
+        .doctor {
+            font-size: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="header">
+    <h1>🏥 {{ doctor_name }} Clinic</h1>
+    <p>Online Appointment System</p>
+</div>
+
+<div class="container">
+
+    <div class="card">
+        <div class="doctor">Doctor: {{ doctor_name }}</div>
+        <p>Book your appointment easily online</p>
+    </div>
+
+    <div class="card">
+        <h3>📅 Book Appointment</h3>
+
+        <input id="name" placeholder="Patient Name">
+        <input id="time" placeholder="Time (2026-07-01T10:00:00)">
+
+        <button onclick="book()">Submit</button>
+
+        <p id="result"></p>
+    </div>
+
+</div>
+
+<script>
+async function book() {
+    let name = document.getElementById("name").value;
+    let time = document.getElementById("time").value;
+
+    let res = await fetch("/appointment", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            patient_name: name,
+            time: time
+        })
+    });
+
+    let data = await res.json();
+
+    document.getElementById("result").innerText =
+        "✅ Appointment booked for " + data.data.patient_name;
+}
+</script>
+
+</body>
+</html>
